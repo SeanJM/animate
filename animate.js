@@ -70,24 +70,6 @@ function animate(el) {
         }
       }
       animDirection(direction);
-    },
-    scroll: function () {
-      var time   = 70;
-      var pos    = el.offset().top-20;
-      var start  = window.pageYOffset;
-      var i      = 0;
-      var frames = 20;
-
-      function s() {
-        i++;
-        window.scrollTo(0,(start-((start/frames)*i))+((pos/frames)*i));
-        if (i<frames) {
-          setTimeout(function () {
-            s();
-          },(time/frames));
-        }
-      };
-      s();
     }
   }
 }
