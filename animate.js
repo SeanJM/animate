@@ -46,30 +46,51 @@ function animate(el) {
         return 0;
       }
     },
+    in: function () {
+      animate(el).init('in');
+    },
+    out: function () {
+      animate(el).init('out');
+    },
     init: function (direction) {
-      function animDirection() {
-        var time;
-        var arr = (direction === 'out')?['out','in']:['in','out'];
-        function exe() {
-          el.removeClass('is-animated_'+arr[1]);
-          el.addClass('is-animated_'+arr[0]);
-          time = animate(el).getTime();
-          setTimeout(function () {
-            el.removeClass('is-animated_'+arr[0]);
-            if (direction === 'in') {
-              el.addClass('is-animated');
-            } else {
-              el.removeClass('is-animated');
-            }
-          },time.duration+time.delay);
-        }
-        if (direction === 'in') {
-          exe();
-        } else if (direction === 'out' && el.hasClass('is-animated')) {
-          exe();
-        }
+      var time;
+      var arr = (direction === 'out')?['out','in']:['in','out'];
+      function exe() {
+        el.removeClass('is-animated_'+arr[1]);
+        el.addClass('is-animated_'+arr[0]);
+        time = animate(el).getTime();
+        setTimeout(function () {
+          el.removeClass('is-animated_'+arr[0]);
+          if (direction === 'in') {
+            el.addClass('is-animated');
+          } else {
+            el.removeClass('is-animated');
+          }
+        },time.duration+time.delay);
       }
-      animDirection(direction);
+      if (direction === 'in') {
+        exe();
+      } else if (direction === 'out' && el.hasClass('is-animated')) {
+        exe();
+      }
+    },
+    scroll: function () {
+      var time   = 70;
+      var pos    = el.offset().top-20;
+      var start  = window.pageYOffset;
+      var i      = 0;
+      var frames = 20;
+
+      function s() {
+        i++;
+        window.scrollTo(0,(start-((start/frames)*i))+((pos/frames)*i));
+        if (i<frames) {
+          setTimeout(function () {
+            s();
+          },(time/frames));
+        }
+      };
+      s();
     }
   }
 }
