@@ -99,12 +99,6 @@ When I want to dismiss the .menu, I would do
 
 This would also do 2 things. It would remove the class 'is-animated' and add the 'is-animated_out' for the duration of the transition, which is again 0.3s. Once the duration runs out, the class 'is-animated_out' will be removed.
 
-So, why did I make this?
-
-Having intro states and active states as well as outro states is not fun to do in CSS and you would need JavaScript anyways. I decided to create a reusable library that I could rely on for many different projects.
-
-In browsers where there is no transition property, the default delay to switch out states is 0--meaning no transition.
-
 #### The Callback
 
     animate(el).out(function () {
@@ -124,6 +118,12 @@ Both 'in' and 'out' return the origin element so they can be chained just like a
     animate(el).in().addClass('is-active')
     // Or
     animate(el).out().removeClass('is-active')
+
+#### Why
+
+Having intro states and active states as well as outro states is not fun to do in CSS and you would need JavaScript anyways. I decided to create a reusable library that I could rely on for many different projects.
+
+In browsers where there is no transition property, the default delay to switch out states is 0--meaning no transition.
 
 #### Support
 
