@@ -45,13 +45,13 @@ function animate(el) {
         return 0;
       }
     },
-    in: function () {
-      animate(el).init('in');
+    in: function (callback) {
+      return animate(el).init('in',callback);
     },
-    out: function () {
-      animate(el).init('out');
+    out: function (callback) {
+      return animate(el).init('out',callback);
     },
-    init: function (direction) {
+    init: function (direction,callback) {
       var time;
       var arr = (direction === 'out')?['out','in']:['in','out'];
       function exe() {
@@ -65,6 +65,9 @@ function animate(el) {
           } else {
             el.removeClass('is-animated');
           }
+          if (typeof callback === 'function') {
+            callback(el);
+          }
         },time.duration+time.delay);
       }
       if (direction === 'in') {
@@ -72,6 +75,7 @@ function animate(el) {
       } else if (direction === 'out' && el.hasClass('is-animated')) {
         exe();
       }
+      return el;
     },
     scroll: function () {
       var time   = 70;
