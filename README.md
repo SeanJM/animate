@@ -105,6 +105,26 @@ Having intro states and active states as well as outro states is not fun to do i
 
 In browsers where there is no transition property, the default delay to switch out states is 0--meaning no transition.
 
+#### The Callback
+
+    animate(el).out(function () {
+      // Callback
+    });
+
+    animate(el).in(function () {
+      // Callback
+    });
+
+Both 'in' and 'out' support a callback function which is executed after the transition is complete.
+
+#### Chaining
+
+Both 'in' and 'out' return the origin element so they can be chained just like any regular jQuery function call:
+
+    animate(el).in().addClass('is-active')
+    // Or
+    animate(el).out().removeClass('is-active')
+
 #### Support
 
 It has been tested with Chrome, Firefox and IE 8+
