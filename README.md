@@ -13,19 +13,19 @@ If you have a menu and you want to toggle it's visibility and transition those s
 eg:
 
     .menu {
-      <span style="color:#4b809f">height</span>: 0;
-      <span style="color:#4b809f">opacity</span>: 0;
-      <span style="color:#4b809f">overflow</span>: hidden;
-      <span style="color:#4b809f">-webkit-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-moz-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-ms-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-o-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">transition</span>: opacity 0.3s;
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+      -webkit-transition: opacity 0.3s;
+      -moz-transition: opacity 0.3s;
+      -ms-transition: opacity 0.3s;
+      -o-transition: opacity 0.3s;
+      transition: opacity 0.3s;
     }
 
     .menu.is-active {
-      <span style="color:#4b809f">height</span>: 100%;
-      <span style="color:#4b809f">opacity</span>: 1;
+      height: 100%;
+      opacity: 1;
     }
 
 Here, when we remove the class .is-active from the .menu, instead of getting our opacity transition--the menu disapears instantly because it's being cropped.
@@ -33,20 +33,20 @@ Here, when we remove the class .is-active from the .menu, instead of getting our
 Or, another example; which is my personal choice for the visibility toggle:
 
     .menu {
-      <span style="color:#4b809f">left</span>: -10000;
-      <span style="color:#4b809f">opacity</span>: 0;
-      <span style="color:#4b809f">overflow</span>: hidden;
-      <span style="color:#4b809f">position</span>: absolute;
-      <span style="color:#4b809f">-webkit-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-moz-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-ms-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-o-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">transition</span>: opacity 0.3s;
+      left: -10000;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      -webkit-transition: opacity 0.3s;
+      -moz-transition: opacity 0.3s;
+      -ms-transition: opacity 0.3s;
+      -o-transition: opacity 0.3s;
+      transition: opacity 0.3s;
     }
 
     .menu.is-active {
-      <span style="color:#4b809f">left</span>: 0;
-      <span style="color:#4b809f">opacity</span>: 1;
+      left: 0;
+      opacity: 1;
     }
 
 When we add .is-active, we get a nice opacity transition--but take it away, and the menu disapears instantly.
@@ -67,25 +67,25 @@ complete, it would add a new class 'is-animated'.
 #### Example CSS
 
     .menu {
-      <span style="color:#4b809f">position</span>: absolute;
-      <span style="color:#4b809f">left</span>: -10000px;
-      <span style="color:#4b809f">opacity</span>: 0;
-      <span style="color:#4b809f">-webkit-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-moz-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-ms-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">-o-transition</span>: opacity 0.3s;
-      <span style="color:#4b809f">transition</span>: opacity 0.3s;
+      position: absolute;
+      left: -10000px;
+      opacity: 0;
+      -webkit-transition: opacity 0.3s;
+      -moz-transition: opacity 0.3s;
+      -ms-transition: opacity 0.3s;
+      -o-transition: opacity 0.3s;
+      transition: opacity 0.3s;
     }
 
     .menu.is-animated,
     .menu.is-animated_in {
-      <span style="color:#4b809f">left</span>:0;
-      <span style="color:#4b809f">opacity</span>: 1;
+      left:0;
+      opacity: 1;
     }
 
     .menu.is-animated_out {
-      <span style="color:#4b809f">left</span>:0;
-      <span style="color:#4b809f">opacity</span>: 0;
+      left:0;
+      opacity: 0;
     }
 
 The default state of .menu would be hidden. The 'in' state and the 'is-animated' state are the same,
