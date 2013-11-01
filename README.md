@@ -33,7 +33,7 @@ Here, when we remove the class .is-active from the .menu, instead of getting our
 Or, another example; which is my personal choice for the visibility toggle:
 
     .menu {
-      left: -10000;
+      left: -10000px;
       opacity: 0;
       overflow: hidden;
       position: absolute;
