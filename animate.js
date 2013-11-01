@@ -9,7 +9,6 @@ function animate(el) {
     getCssProperty: function (property) {
       var arr     = ['','ms','webkit','Moz','O'];
       var style   = window.getComputedStyle(el[0]);
-      var p;
       var r;
       function capitalize(str) {
         return str[0].toUpperCase()+str.substr(1,str.length-1);
