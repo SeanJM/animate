@@ -51,28 +51,31 @@ function animate(el) {
     out: function (callback) {
       return animate(el).init('out',callback);
     },
-    init: function (direction,callback) {
-      var time;
-      var arr = (direction === 'out')?['out','in']:['in','out'];
-      function exe() {
-        el.removeClass('is-animated_'+arr[1]);
-        el.addClass('is-animated_'+arr[0]);
-        time = animate(el).getTime();
+    classSwitch: function (arr) {
+      el.removeClass('is-animated_'+arr[1]);
+      el.addClass('is-animated_'+arr[0]);
+      return animate(el);
+    },
+    ifOut: function (direction,arr,callback) {
+      var time = animate(el).getTime();
+      if (direction === 'out') {
         setTimeout(function () {
           el.removeClass('is-animated_'+arr[0]);
-          if (direction === 'in') {
-            el.addClass('is-animated');
-          } else {
-            el.removeClass('is-animated');
-          }
           if (typeof callback === 'function') {
             callback(el);
           }
         },time.duration+time.delay);
       }
+      return animate(el);
+    },
+    init: function (direction,callback) {
+      var arr = (direction === 'out')?['out','in']:['in','out'];
+      function exe() {
+        animate(el).classSwitch(arr).ifOut(direction,arr,callback);
+      }
       if (direction === 'in') {
         exe();
-      } else if (direction === 'out' && el.hasClass('is-animated')) {
+      } else if (direction === 'out' && el.hasClass('is-animated_in')) {
         exe();
       }
       return el;
@@ -96,4 +99,4 @@ function animate(el) {
       s();
     }
   }
-}
+};
