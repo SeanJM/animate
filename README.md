@@ -60,9 +60,7 @@ You would want to have it's 'in' animated. You would then do:
 
     animate(el).in();
 
-This would do 2 things, it would add a class of is-animated_in to the selected element for the
-duration of it's 'animation' or 'transition' property. And once the 'animation' or 'transition' was
-complete, it would add a new class 'is-animated'.
+This would add a class of 'is-animated_in' to the selected element.
 
 #### Example CSS
 
@@ -87,8 +85,7 @@ complete, it would add a new class 'is-animated'.
       opacity: 0;
     }
 
-The default state of .menu would be hidden. The 'in' state and the 'is-animated' state are the same,
-so that when the intro animation is complete, it will remain visible.
+The default state of .menu would be hidden. The 'in' state ensures that when the intro animation is complete, it will remain visible.
 
 #### The Outro Animation
 
@@ -96,7 +93,7 @@ When I want to dismiss the .menu, I would do
 
     animate(el).out();
 
-This would also do 2 things. It would remove the class 'is-animated' and add the 'is-animated_out' for the duration of the transition, which is again 0.3s. Once the duration runs out, the class 'is-animated_out' will be removed.
+It would remove the class 'is-animated_in' and add the 'is-animated_out' for the duration of the transition, which is 0.3s. Once the duration runs out, the class 'is-animated_out' will be removed, restoring the element back to the default state of invisible.
 
 #### The Callback
 
