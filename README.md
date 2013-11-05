@@ -77,7 +77,6 @@ complete, it would add a new class 'is-animated'.
       transition: opacity 0.3s;
     }
 
-    .menu.is-animated,
     .menu.is-animated_in {
       left:0;
       opacity: 1;
@@ -101,15 +100,15 @@ This would also do 2 things. It would remove the class 'is-animated' and add the
 
 #### The Callback
 
-    animate(el).out(function () {
+    animate(el).out(function (el) {
       // Callback
     });
 
-    animate(el).in(function () {
+    animate(el).in(function (el) {
       // Callback
     });
 
-Both 'in' and 'out' support a callback function which is executed after the transition is complete.
+Both 'in' and 'out' support a callback function which is executed after the transition is complete. The argument supplied is the original element.
 
 #### Chaining
 
