@@ -58,14 +58,14 @@ function animate(el) {
     },
     ifOut: function (direction,arr,callback) {
       var time = animate(el).getTime();
-      if (direction === 'out') {
-        setTimeout(function () {
+      setTimeout(function () {
+        if (direction === 'out') {
           el.removeClass('is-animated_'+arr[0]);
-          if (typeof callback === 'function') {
-            callback(el);
-          }
-        },time.duration+time.delay);
-      }
+        }
+        if (typeof callback === 'function') {
+          callback(el);
+        }
+      },time.duration+time.delay);
       return animate(el);
     },
     init: function (direction,callback) {
