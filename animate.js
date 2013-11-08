@@ -26,15 +26,21 @@ function animate(el) {
       return false;
     },
     getTime: function () {
-      var style = window.getComputedStyle(el[0]);
-      var obj = {};
+      var obj = {
+        duration : 0,
+        delay    : 0
+      };
+      // For IE 8
+      if (typeof window.getComputedStyle === 'function') {
+        var style = window.getComputedStyle(el[0]);
 
-      obj.duration  = animate(el).jsTime(animate(el).getCssProperty('transitionDuration'));
-      obj.delay     = animate(el).jsTime(animate(el).getCssProperty('transitionDelay'));
+        obj.duration  = animate(el).jsTime(animate(el).getCssProperty('transitionDuration'));
+        obj.delay     = animate(el).jsTime(animate(el).getCssProperty('transitionDelay'));
 
-      if (obj.delay === 0 && obj.duration === 0) {
-        obj.duration  = animate(el).jsTime(animate(el).getCssProperty('animationDuration'));
-        obj.delay     = animate(el).jsTime(animate(el).getCssProperty('animationDelay'));
+        if (obj.delay === 0 && obj.duration === 0) {
+          obj.duration  = animate(el).jsTime(animate(el).getCssProperty('animationDuration'));
+          obj.delay     = animate(el).jsTime(animate(el).getCssProperty('animationDelay'));
+        }
       }
       return obj;
     },
@@ -45,10 +51,10 @@ function animate(el) {
         return 0;
       }
     },
-    in: function (callback) {
+    _in: function (callback) {
       return animate(el).init('in',callback);
     },
-    out: function (callback) {
+    _out: function (callback) {
       return animate(el).init('out',callback);
     },
     classSwitch: function (arr) {
