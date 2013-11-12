@@ -51,11 +51,22 @@ function animate(el) {
         return 0;
       }
     },
-    _in: function (callback) {
+    start: function (callback) {
       return animate(el).init('in',callback);
     },
-    _out: function (callback) {
+    end: function (callback) {
       return animate(el).init('out',callback);
+    },
+    custom: function (name,callback) {
+      var time = animate(el).getTime();
+      setTimeout(function () {
+        el.removeClass(name);
+        if (typeof callback === 'function') {
+          callback(el);
+        }
+      },time.duration+time.delay);
+      el.addClass(name);
+      return el;
     },
     classSwitch: function (arr) {
       el.removeClass('is-animated_'+arr[1]);
