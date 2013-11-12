@@ -56,9 +56,9 @@ So, the problem is fairly clear--we need an outro class inbetween the hidden sta
 #### The Intro Animation
 
 When you have an element which you want to be animated, let's say a toggle for a dropdown menu.
-You would want to have it's 'in' animated. You would then do:
+You would want to have it's 'start' animated. You would then do:
 
-    animate(el).in();
+    animate(el).start();
 
 This would add a class of 'is-animated_in' to the selected element.
 
@@ -85,35 +85,43 @@ This would add a class of 'is-animated_in' to the selected element.
       opacity: 0;
     }
 
-The default state of .menu would be hidden. The 'in' state ensures that when the intro animation is complete, it will remain visible.
+The default state of .menu would be hidden. The 'start' state ensures that when the intro animation is complete, it will remain visible.
 
 #### The Outro Animation
 
 When I want to dismiss the .menu, I would do
 
-    animate(el).out();
+    animate(el).end();
 
 It would remove the class 'is-animated_in' and add the 'is-animated_out' for the duration of the transition, which is 0.3s. Once the duration runs out, the class 'is-animated_out' will be removed, restoring the element back to the default state of invisible.
 
 #### The Callback
 
-    animate(el).out(function (el) {
+    animate(el).end(function (el) {
       // Callback
     });
 
-    animate(el).in(function (el) {
+    animate(el).start(function (el) {
       // Callback
     });
 
-Both 'in' and 'out' support a callback function which is executed after the transition is complete. The argument supplied is the original element.
+Both 'start' and 'end' support a callback function which is executed after the transition is complete. The argument supplied is the original element.
+
+#### Custom
+
+The custom method will add 'class-name' to the selected element and remove that class once the animation is complete.
+
+    animate(el).custom('class-name',function (el) {
+      // Callback
+    });
 
 #### Chaining
 
-Both 'in' and 'out' return the origin element so they can be chained just like any regular jQuery function call:
+Both 'start' and 'end' return the origin element so they can be chained just like any regular jQuery function call:
 
-    animate(el).in().addClass('is-active')
+    animate(el).start().addClass('is-active')
     // Or
-    animate(el).out().removeClass('is-active')
+    animate(el).end().removeClass('is-active')
 
 #### Why
 
