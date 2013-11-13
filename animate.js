@@ -1,7 +1,5 @@
-/* ------------- Animate v1.0 */
-
+/* ------------- Animate v1.1.1 */
 // MIT License
-
 // Original Code by Sean MacIsaac
 
 function animate(el) {
@@ -13,14 +11,16 @@ function animate(el) {
       function capitalize(str) {
         return str[0].toUpperCase()+str.substr(1,str.length-1);
       }
-      for (var i=0;i < arr.length;i++) {
-        if (arr[i].length < 1) {
-          r = property;
-        } else {
-          r = arr[i]+capitalize(property);
-        }
-        if (typeof style[r] === 'string') {
-          return style[r];
+      if (style !== null) {
+        for (var i=0;i < arr.length;i++) {
+          if (arr[i].length < 1) {
+            r = property;
+          } else {
+            r = arr[i]+capitalize(property);
+          }
+          if (typeof style[r] === 'string') {
+            return style[r];
+          }
         }
       }
       return false;
@@ -32,8 +32,6 @@ function animate(el) {
       };
       // For IE 8
       if (typeof window.getComputedStyle === 'function') {
-        var style = window.getComputedStyle(el[0]);
-
         obj.duration  = animate(el).jsTime(animate(el).getCssProperty('transitionDuration'));
         obj.delay     = animate(el).jsTime(animate(el).getCssProperty('transitionDelay'));
 
@@ -86,16 +84,20 @@ function animate(el) {
       return animate(el);
     },
     init: function (direction,callback) {
-      var arr = (direction === 'out')?['out','in']:['in','out'];
-      function exe() {
-        animate(el).classSwitch(arr).ifOut(direction,arr,callback);
+      if (typeof el[0] === 'undefined') {
+        return false;
+      } else {
+        var arr = (direction === 'out')?['out','in']:['in','out'];
+        function exe() {
+          animate(el).classSwitch(arr).ifOut(direction,arr,callback);
+        }
+        if (direction === 'in') {
+          exe();
+        } else if (direction === 'out' && el.hasClass('is-animated_in')) {
+          exe();
+        }
+        return el;
       }
-      if (direction === 'in') {
-        exe();
-      } else if (direction === 'out' && el.hasClass('is-animated_in')) {
-        exe();
-      }
-      return el;
     },
     scroll: function () {
       var time   = 70;
