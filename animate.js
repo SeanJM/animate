@@ -1,4 +1,4 @@
-/* ------------- Animate v1.1.1 */
+/* ------------- Animate v1.1.2 */
 // MIT License
 // Original Code by Sean MacIsaac
 
@@ -65,6 +65,13 @@ function animate(el) {
       },time.duration+time.delay);
       el.addClass(name);
       return el;
+    },
+    toggle: function () {
+      if (el.hasClass('is-animated_in')) {
+        animate(el).end();
+      } else {
+        animate(el).start();
+      }
     },
     classSwitch: function (arr) {
       el.removeClass('is-animated_'+arr[1]);
