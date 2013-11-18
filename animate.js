@@ -1,4 +1,4 @@
-/* ------------- Animate v1.1.2 */
+/* ------------- Animate v1.1.3 */
 // MIT License
 // Original Code by Sean MacIsaac
 
@@ -56,6 +56,7 @@ function animate(el) {
       return animate(el).init('out',callback);
     },
     custom: function (name,callback) {
+      el.addClass(name);
       var time = animate(el).getTime();
       setTimeout(function () {
         el.removeClass(name);
@@ -63,7 +64,6 @@ function animate(el) {
           callback(el);
         }
       },time.duration+time.delay);
-      el.addClass(name);
       return el;
     },
     toggle: function () {
@@ -108,7 +108,7 @@ function animate(el) {
     },
     scroll: function () {
       var time   = 70;
-      var pos    = el.offset().top-20;
+      var pos    = (el.offset().top-el.height()/2)-($(window).height()/2);
       var start  = window.pageYOffset;
       var i      = 0;
       var frames = 20;
