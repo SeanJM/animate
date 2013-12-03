@@ -1,4 +1,4 @@
-/* ------------- Animate v1.1.3 */
+/* ------------- Animate v1.1.5 */
 // MIT License
 // Original Code by Sean MacIsaac
 
@@ -67,22 +67,22 @@ function animate(el) {
       return el;
     },
     toggle: function () {
-      if (el.hasClass('is-animated_in')) {
+      if (el.hasClass('_animated-in')) {
         animate(el).end();
       } else {
         animate(el).start();
       }
     },
     classSwitch: function (arr) {
-      el.removeClass('is-animated_'+arr[1]);
-      el.addClass('is-animated_'+arr[0]);
+      el.removeClass('_animated-'+arr[1]);
+      el.addClass('_animated-'+arr[0]);
       return animate(el);
     },
     ifOut: function (direction,arr,callback) {
       var time = animate(el).getTime();
       setTimeout(function () {
         if (direction === 'out') {
-          el.removeClass('is-animated_'+arr[0]);
+          el.removeClass('_animated-'+arr[0]);
         }
         if (typeof callback === 'function') {
           callback(el);
@@ -100,7 +100,7 @@ function animate(el) {
         }
         if (direction === 'in') {
           exe();
-        } else if (direction === 'out' && el.hasClass('is-animated_in')) {
+        } else if (direction === 'out' && el.hasClass('_animated-in')) {
           exe();
         }
         return el;
