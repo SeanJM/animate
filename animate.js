@@ -1,53 +1,58 @@
-/* ------------- Animate v1.1.5 */
+//@ sourceURL=animate.js
+
+/* ------------- Animate v1.1.8 */
 // MIT License
 // Original Code by Sean MacIsaac
 
 function animate(el) {
-  return {
-    getCssProperty: function (property) {
-      var arr     = ['','ms','webkit','Moz','O'];
-      var style   = window.getComputedStyle(el[0]);
-      var r;
-      function capitalize(str) {
-        return str[0].toUpperCase()+str.substr(1,str.length-1);
-      }
-      if (style !== null) {
-        for (var i=0;i < arr.length;i++) {
-          if (arr[i].length < 1) {
-            r = property;
-          } else {
-            r = arr[i]+capitalize(property);
-          }
-          if (typeof style[r] === 'string') {
-            return style[r];
-          }
+  function getCssProperty(property) {
+    var arr     = ['','ms','webkit','Moz','O'];
+    var style   = window.getComputedStyle(el[0]);
+    var r;
+    function capitalize(str) {
+      return str[0].toUpperCase()+str.substr(1,str.length-1);
+    }
+    if (style !== null) {
+      for (var i=0;i < arr.length;i++) {
+        if (arr[i].length < 1) {
+          r = property;
+        } else {
+          r = arr[i]+capitalize(property);
+        }
+        if (typeof style[r] === 'string') {
+          return style[r];
         }
       }
-      return false;
-    },
-    getTime: function () {
-      var obj = {
-        duration : 0,
-        delay    : 0
-      };
-      // For IE 8
-      if (typeof window.getComputedStyle === 'function') {
-        obj.duration  = animate(el).jsTime(animate(el).getCssProperty('transitionDuration'));
-        obj.delay     = animate(el).jsTime(animate(el).getCssProperty('transitionDelay'));
+    }
+    return false;
+  }
+  function jsTime(style) {
+    if (style) {
+      return parseFloat(style.match(/([0-9]+(\.[0-9]+|))s/)[1])*1000;
+    } else {
+      return 0;
+    }
+  }
+  function getTime() {
+    var obj = {
+      duration : 0,
+      delay    : 0
+    };
+    // For IE 8
+    if (typeof window.getComputedStyle === 'function') {
+      obj.duration  = jsTime(getCssProperty('transitionDuration'));
+      obj.delay     = jsTime(getCssProperty('transitionDelay'));
 
-        if (obj.delay === 0 && obj.duration === 0) {
-          obj.duration  = animate(el).jsTime(animate(el).getCssProperty('animationDuration'));
-          obj.delay     = animate(el).jsTime(animate(el).getCssProperty('animationDelay'));
-        }
+      if (obj.delay === 0 && obj.duration === 0) {
+        obj.duration  = jsTime(getCssProperty('animationDuration'));
+        obj.delay     = jsTime(getCssProperty('animationDelay'));
       }
-      return obj;
-    },
-    jsTime: function (style) {
-      if (style) {
-        return parseFloat(style.match(/([0-9]+(\.[0-9]+|))s/)[1])*1000;
-      } else {
-        return 0;
-      }
+    }
+    return obj.duration+obj.delay;
+  }
+  return {
+    getTime: function () {
+      return getTime();
     },
     start: function (callback) {
       return animate(el).init('in',callback);
@@ -57,13 +62,13 @@ function animate(el) {
     },
     custom: function (name,callback) {
       el.addClass(name);
-      var time = animate(el).getTime();
+      var time = getTime();
       setTimeout(function () {
         el.removeClass(name);
         if (typeof callback === 'function') {
           callback(el);
         }
-      },time.duration+time.delay);
+      },time);
       return el;
     },
     toggle: function () {
@@ -73,36 +78,33 @@ function animate(el) {
         animate(el).start();
       }
     },
-    classSwitch: function (arr) {
-      el.removeClass('_animated-'+arr[1]);
-      el.addClass('_animated-'+arr[0]);
-      return animate(el);
-    },
-    ifOut: function (direction,arr,callback) {
-      var time = animate(el).getTime();
+    ifOut: function (direction,callback) {
+      var time = getTime();
       setTimeout(function () {
         if (direction === 'out') {
-          el.removeClass('_animated-'+arr[0]);
+          el.removeClass('_animated-out');
         }
         if (typeof callback === 'function') {
           callback(el);
         }
-      },time.duration+time.delay);
+      },time);
       return animate(el);
     },
     init: function (direction,callback) {
       if (typeof el[0] === 'undefined') {
         return false;
       } else {
-        var arr = (direction === 'out')?['out','in']:['in','out'];
         function exe() {
-          animate(el).classSwitch(arr).ifOut(direction,arr,callback);
+          if (direction === 'in') {
+            el.removeClass('_animated-out');
+            el.addClass('_animated-in');
+          } else {
+            el.addClass('_animated-out');
+            el.removeClass('_animated-in');
+          }
+          animate(el).ifOut(direction,callback);
         }
-        if (direction === 'in') {
-          exe();
-        } else if (direction === 'out' && el.hasClass('_animated-in')) {
-          exe();
-        }
+        exe();
         return el;
       }
     },
