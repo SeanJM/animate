@@ -23,12 +23,12 @@ eg:
       transition: opacity 0.3s;
     }
 
-    .menu.is-active {
+    .menu._animated-in {
       height: 100%;
       opacity: 1;
     }
 
-Here, when we remove the class .is-active from the .menu, instead of getting our opacity transition--the menu disapears instantly because it's being cropped.
+Here, when we remove the class ._animated-in from the .menu, instead of getting our opacity transition--the menu disapears instantly because it's being cropped.
 
 Or, another example; which is my personal choice for the visibility toggle:
 
@@ -44,12 +44,13 @@ Or, another example; which is my personal choice for the visibility toggle:
       transition: opacity 0.3s;
     }
 
-    .menu.is-active {
-      left: 0;
+    .menu._animated-in {
       opacity: 1;
+      left: 0;
     }
 
-When we add .is-active, we get a nice opacity transition--but take it away, and the menu disapears instantly.
+
+When we add ._animated-in, we get a nice opacity transition--but take it away, and the menu disapears instantly.
 
 So, the problem is fairly clear--we need an outro class inbetween the hidden state and the visible state. This is where this script comes in, solving this problem.
 
@@ -60,7 +61,7 @@ You would want to have it's 'start' animated. You would then do:
 
     animate(el).start();
 
-This would add a class of 'is-animated_in' to the selected element.
+This would add a class of '_animated-in' to the selected element.
 
 #### Example CSS
 
@@ -75,14 +76,12 @@ This would add a class of 'is-animated_in' to the selected element.
       transition: opacity 0.3s;
     }
 
-    .menu.is-animated_in {
+    .menu._animated-in,
+    .menu._animated-out {
       left:0;
-      opacity: 1;
     }
-
-    .menu.is-animated_out {
-      left:0;
-      opacity: 0;
+    .menu._animated-in {
+      opacity: 1;
     }
 
 The default state of .menu would be hidden. The 'start' state ensures that when the intro animation is complete, it will remain visible.
@@ -93,7 +92,7 @@ When I want to dismiss the .menu, I would do
 
     animate(el).end();
 
-It would remove the class 'is-animated_in' and add the 'is-animated_out' for the duration of the transition, which is 0.3s. Once the duration runs out, the class 'is-animated_out' will be removed, restoring the element back to the default state of invisible.
+It would remove the class '_animated-in' and add the '_animated-out' for the duration of the transition, which is 0.3s. Once the duration runs out, the class '_animated-out' will be removed, restoring the element back to the default state of invisible.
 
 #### The Callback
 
@@ -119,9 +118,9 @@ The custom method will add 'class-name' to the selected element and remove that 
 
 Both 'start' and 'end' return the origin element so they can be chained just like any regular jQuery function call:
 
-    animate(el).start().addClass('is-active')
+    animate(el).start().addClass('_animated-in')
     // Or
-    animate(el).end().removeClass('is-active')
+    animate(el).end().removeClass('_animated-in')
 
 #### Why
 
