@@ -1,10 +1,12 @@
 //@ sourceURL=animate.js
 
-/* ------------- Animate v1.1.8 */
+/* ------------- Animate v1.1.9 */
 // MIT License
 // Original Code by Sean MacIsaac
 
-function animate(el) {
+;function animate(el) {
+  var inClass = '_animated-in';
+  var outClass = '_animated-out';
   function getCssProperty(property) {
     var arr     = ['','ms','webkit','Moz','O'];
     var style   = window.getComputedStyle(el[0]);
@@ -51,6 +53,12 @@ function animate(el) {
     return obj.duration+obj.delay;
   }
   return {
+    animatedIn: function () {
+      return (el.hasClass(inClass));
+    },
+    animatedOut: function () {
+      return (el.hasClass(outClass));
+    },
     getTime: function () {
       return getTime();
     },
@@ -72,7 +80,7 @@ function animate(el) {
       return el;
     },
     toggle: function () {
-      if (el.hasClass('_animated-in')) {
+      if (animate(el).animatedIn()) {
         animate(el).end();
       } else {
         animate(el).start();
@@ -82,7 +90,7 @@ function animate(el) {
       var time = getTime();
       setTimeout(function () {
         if (direction === 'out') {
-          el.removeClass('_animated-out');
+          el.removeClass(outClass);
         }
         if (typeof callback === 'function') {
           callback(el);
@@ -96,11 +104,11 @@ function animate(el) {
       } else {
         function exe() {
           if (direction === 'in') {
-            el.removeClass('_animated-out');
-            el.addClass('_animated-in');
+            el.removeClass(outClass);
+            el.addClass(inClass);
           } else {
-            el.addClass('_animated-out');
-            el.removeClass('_animated-in');
+            el.addClass(outClass);
+            el.removeClass(inClass);
           }
           animate(el).ifOut(direction,callback);
         }
