@@ -2,18 +2,28 @@
 
 /* 
   Name   : Animate
-  Version: 1.2.0
+  Version: 1.2.1
   License: MIT License
   By     : Sean MacIsaac
 */
 
-;function animate(el) {
+// animate(options||string).start(el,callback);
+// var editIn = animate('edit');
+;function animate() {
   var options = {
     'class' : '_animated',
-    'in'    : '-in',
-    'out'   : '-out'
+    'start'    : '-in',
+    'end'   : '-out'
   }
-  function getCssProperty(property) {
+  var arr = Array.prototype.slice.apply(arguments);
+  for (var i = 0;i < arr.length;i++) {
+    if (typeof arr[i] === 'string') {
+      options['class'] = arr[i];
+    } else if (typeof arr[i] === 'object') {
+      $.extend(options,arr[i]);
+    }
+  }
+  function getCssProperty(el,property) {
     var arr     = ['','ms','webkit','Moz','O'];
     var style   = window.getComputedStyle(el[0]);
     var r;
@@ -41,19 +51,19 @@
       return 0;
     }
   }
-  function getTime() {
+  function getTime(el) {
     var obj = {
       duration : 0,
       delay    : 0
     };
     // For IE 8
     if (typeof window.getComputedStyle === 'function') {
-      obj.duration  = jsTime(getCssProperty('transitionDuration'));
-      obj.delay     = jsTime(getCssProperty('transitionDelay'));
+      obj.duration  = jsTime(getCssProperty(el,'transitionDuration'));
+      obj.delay     = jsTime(getCssProperty(el,'transitionDelay'));
 
       if (obj.delay === 0 && obj.duration === 0) {
-        obj.duration  = jsTime(getCssProperty('animationDuration'));
-        obj.delay     = jsTime(getCssProperty('animationDelay'));
+        obj.duration  = jsTime(getCssProperty(el,'animationDuration'));
+        obj.delay     = jsTime(getCssProperty(el,'animationDelay'));
       }
     }
     return obj.duration+obj.delay;
@@ -61,31 +71,30 @@
   function init() {
     // Remove the nesting of the arguments from being passed inside an array
     var arr = Array.prototype.slice.apply(arguments[0]);
+    var el;
     $.each(arr,function (i,k) {
       if (typeof k === 'function') {
         options.callback = k;
       } else if (typeof k === 'object') {
-        options = $.extend(options,k);
-      } else if (typeof k === 'string') {
-        options['class'] = k;
+        el = $.extend(options,k);
       }
     });
     function toggle() {
       if (options['direction'] === 'in') {
-        el.removeClass(options['class'] + options['out']);
-        el.addClass(options['class'] + options['in']);
+        el.removeClass(options['class'] + options['end']);
+        el.addClass(options['class'] + options['start']);
       } else {
-        el.addClass(options['class'] + options['out']);
-        el.removeClass(options['class'] + options['in']);
+        el.addClass(options['class'] + options['end']);
+        el.removeClass(options['class'] + options['start']);
       }
       setTimeout(function () {
         if (options.direction === 'out') {
-          el.removeClass(options['class'] + options['out']);
+          el.removeClass(options['class'] + options['end']);
         }
         if (typeof options.callback === 'function') {
           options.callback(el);
         }
-      },getTime());
+      },getTime(el));
     }
     if (typeof el[0] === 'undefined') {
       return false;
@@ -96,12 +105,12 @@
   }
   return {
     animatedIn: function () {
-      return (el.hasClass(inClass));
+      return (el.hasClass(options['class'] + options['start']));
     },
     animatedOut: function () {
-      return (el.hasClass(outClass));
+      return (el.hasClass(options['class'] + options['end']));
     },
-    start: function (string) {
+    start: function () {
       options['direction'] = 'in';
       return init(arguments);
     },
@@ -109,7 +118,7 @@
       options['direction'] = 'out';
       return init(arguments);
     },
-    scroll: function () {
+    scroll: function (el) {
       var time   = 70;
       var pos    = (el.offset().top-el.height()/2)-($(window).height()/2);
       var start  = window.pageYOffset;
