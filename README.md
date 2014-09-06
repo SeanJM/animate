@@ -11,49 +11,52 @@ The MIT License (MIT)
 #### The Problem
 
 If you have a menu and you want to toggle it's visibility and transition those states.
-eg:
+
+###### CSS
 
     .menu {
-      left: -10000px;
-      opacity: 0;
-      overflow: hidden;
-      position: absolute;
-      transition: opacity 0.3s;
+      left       : -10000px;
+      opacity    : 0;
+      overflow   : hidden;
+      position   : absolute;
+      transition : opacity 0.3s;
     }
 
     .menu._animated-in {
-      opacity: 1;
-      left: 0;
+      opacity    : 1;
+      left       : 0;
     }
 
 
-When we add ._animated-in, we get a nice opacity transition--but take it away, and the menu disapears. This is where the script comes into play.
+When we add `._animated-in`, we get a nice opacity transition--but take it away, and the menu disapears. This is where the script comes into play.
 
 We need an outro class inbetween the hidden state and the visible state. Which is removed once the animation is finished.
 
 #### The Intro Animation
+
+###### JavaScript
 
     animate().start(el[,callback]);
     animate().out(el[,callback]);
 
 In the case of the outro animation the callback is executed after the animation.
 
-#### Example CSS
+###### CSS
 
     .menu {
-      position: absolute;
-      left: -10000px;
-      opacity: 0;
-      transition: opacity 0.3s;
+      position   : absolute;
+      left       : -10000px;
+      opacity    : 0;
+      transition : opacity 0.3s;
     }
 
     .menu._animated-in,
     .menu._animated-out {
-      left:0;
+      left       : 0;
     }
 
     .menu._animated-in {
-      opacity: 1;
+      opacity    : 1;
     }
 
 #### Overriding all defaults with an object
@@ -73,7 +76,7 @@ In the case of the outro animation the callback is executed after the animation.
 
     var override = animate({
       'class' : '_override',
-      'start'    : '--in',
+      'start' : '--in',
       'end'   : '--out'
     });
 
