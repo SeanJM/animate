@@ -1,12 +1,18 @@
 //@ sourceURL=animate.js
 
-/* ------------- Animate v1.1.9 */
-// MIT License
-// Original Code by Sean MacIsaac
+/* 
+  Name   : Animate
+  Version: 1.2.0
+  License: MIT License
+  By     : Sean MacIsaac
+*/
 
 ;function animate(el) {
-  var inClass = '_animated-in';
-  var outClass = '_animated-out';
+  var options = {
+    'class' : '_animated',
+    'in'    : '-in',
+    'out'   : '-out'
+  }
   function getCssProperty(property) {
     var arr     = ['','ms','webkit','Moz','O'];
     var style   = window.getComputedStyle(el[0]);
@@ -52,6 +58,42 @@
     }
     return obj.duration+obj.delay;
   }
+  function init() {
+    // Remove the nesting of the arguments from being passed inside an array
+    var arr = Array.prototype.slice.apply(arguments[0]);
+    $.each(arr,function (i,k) {
+      if (typeof k === 'function') {
+        options.callback = k;
+      } else if (typeof k === 'object') {
+        options = $.extend(options,k);
+      } else if (typeof k === 'string') {
+        options['class'] = k;
+      }
+    });
+    function toggle() {
+      if (options['direction'] === 'in') {
+        el.removeClass(options['class'] + options['out']);
+        el.addClass(options['class'] + options['in']);
+      } else {
+        el.addClass(options['class'] + options['out']);
+        el.removeClass(options['class'] + options['in']);
+      }
+      setTimeout(function () {
+        if (options.direction === 'out') {
+          el.removeClass(options['class'] + options['out']);
+        }
+        if (typeof options.callback === 'function') {
+          options.callback(el);
+        }
+      },getTime());
+    }
+    if (typeof el[0] === 'undefined') {
+      return false;
+    } else {
+      toggle();
+      return el;
+    }
+  }
   return {
     animatedIn: function () {
       return (el.hasClass(inClass));
@@ -59,62 +101,13 @@
     animatedOut: function () {
       return (el.hasClass(outClass));
     },
-    getTime: function () {
-      return getTime();
+    start: function (string) {
+      options['direction'] = 'in';
+      return init(arguments);
     },
-    start: function (callback) {
-      return animate(el).init('in',callback);
-    },
-    end: function (callback) {
-      return animate(el).init('out',callback);
-    },
-    custom: function (name,callback) {
-      el.addClass(name);
-      var time = getTime();
-      setTimeout(function () {
-        el.removeClass(name);
-        if (typeof callback === 'function') {
-          callback(el);
-        }
-      },time);
-      return el;
-    },
-    toggle: function () {
-      if (animate(el).animatedIn()) {
-        animate(el).end();
-      } else {
-        animate(el).start();
-      }
-    },
-    ifOut: function (direction,callback) {
-      var time = getTime();
-      setTimeout(function () {
-        if (direction === 'out') {
-          el.removeClass(outClass);
-        }
-        if (typeof callback === 'function') {
-          callback(el);
-        }
-      },time);
-      return animate(el);
-    },
-    init: function (direction,callback) {
-      if (typeof el[0] === 'undefined') {
-        return false;
-      } else {
-        function exe() {
-          if (direction === 'in') {
-            el.removeClass(outClass);
-            el.addClass(inClass);
-          } else {
-            el.addClass(outClass);
-            el.removeClass(inClass);
-          }
-          animate(el).ifOut(direction,callback);
-        }
-        exe();
-        return el;
-      }
+    end: function () {
+      options['direction'] = 'out';
+      return init(arguments);
     },
     scroll: function () {
       var time   = 70;

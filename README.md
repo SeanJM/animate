@@ -16,10 +16,6 @@ eg:
       height: 0;
       opacity: 0;
       overflow: hidden;
-      -webkit-transition: opacity 0.3s;
-      -moz-transition: opacity 0.3s;
-      -ms-transition: opacity 0.3s;
-      -o-transition: opacity 0.3s;
       transition: opacity 0.3s;
     }
 
@@ -37,10 +33,6 @@ Or, another example; which is my personal choice for the visibility toggle:
       opacity: 0;
       overflow: hidden;
       position: absolute;
-      -webkit-transition: opacity 0.3s;
-      -moz-transition: opacity 0.3s;
-      -ms-transition: opacity 0.3s;
-      -o-transition: opacity 0.3s;
       transition: opacity 0.3s;
     }
 
@@ -69,10 +61,6 @@ This would add a class of '_animated-in' to the selected element.
       position: absolute;
       left: -10000px;
       opacity: 0;
-      -webkit-transition: opacity 0.3s;
-      -moz-transition: opacity 0.3s;
-      -ms-transition: opacity 0.3s;
-      -o-transition: opacity 0.3s;
       transition: opacity 0.3s;
     }
 
@@ -110,17 +98,53 @@ Both 'start' and 'end' support a callback function which is executed after the t
 
 The custom method will add 'class-name' to the selected element and remove that class once the animation is complete.
 
-    animate(el).custom('class-name',function (el) {
+    animate(el).start('class-name',function (el) {
       // Callback
     });
 
-#### Chaining
+When using a string as an argument this custom class name for 'start' will get '-in' appended to it.
 
-Both 'start' and 'end' return the origin element so they can be chained just like any regular jQuery function call:
+    .class-name-in
 
-    animate(el).start().addClass('_animated-in')
-    // Or
-    animate(el).end().removeClass('_animated-in')
+animate(el).end('class-name',function (el) {
+      // Callback
+    });
+
+When using a string as an argument this custom class name for 'end' will get '-out' appended to it.
+
+    .class-name-out
+
+#### Overriding all defaults with an object
+
+  animate(el).start({
+    'class' : '_animated',
+    'in'    : '-in',
+    'out'   : '-out'
+  },function () { //calback });
+
+  animate(el).start({
+    'class' : 'animated',
+    'in'    : 'In',
+    'out'   : 'Out'
+  },function () { //calback });
+
+This would transform the 'start' class to be 'animatedIn' and the 'end' class to be 'animatedOut'
+
+#### Argument order
+
+The order of the arguments does not matter, you could even call it like this:
+
+    animate(el).start('custom-class',{'in':'_start','out':'_end'},function () {});
+
+or
+
+    animate(el).start(function () {},{'in':'_start','out':'_end'},'custom-class');
+
+or
+
+    animate(el).start('custom-class');
+
+This renders the code more flexible to your style
 
 #### Why
 
