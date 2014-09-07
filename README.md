@@ -5,8 +5,6 @@ The MIT License (MIT)
 
 - jQuery
 
-### Documentation
-
 #### The Problem
 
 ###### CSS
