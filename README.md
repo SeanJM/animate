@@ -56,7 +56,7 @@ In the case of the outro animation the callback is executed after the animation.
       opacity    : 1;
     }
 
-#### Overriding all defaults with an object
+#### Overriding defaults
 
 ##### 1. Custom class name
 
