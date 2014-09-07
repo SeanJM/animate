@@ -1,8 +1,8 @@
 # Animate
-### Version: 1.0
+#### Version: 1.2.1
 The MIT License (MIT)
 
-### Requirements
+#### Requirements
 
 - jQuery
 
