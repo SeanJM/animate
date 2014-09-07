@@ -9,8 +9,6 @@ The MIT License (MIT)
 
 #### The Problem
 
-If you have a menu and you want to toggle it's visibility and transition those states.
-
 ###### CSS
 
     .menu {
