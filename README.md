@@ -1,5 +1,4 @@
-# Animate
-#### Version: 1.2.1
+# Animate 1.2.1
 The MIT License (MIT)
 
 #### Requirements
