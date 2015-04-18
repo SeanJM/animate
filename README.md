@@ -1,4 +1,4 @@
-# Animate 1.2.4
+# Animate 1.5.1
 ##### A JavaScript plugin to handle 'intro' and 'outro' states for CSS animations
 The MIT License (MIT)
 
