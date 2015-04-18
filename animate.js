@@ -1,137 +1,140 @@
-//@ sourceURL=animate.js
-
 /* 
-  Name   : Animate
-  Version: 1.2.4
-  License: MIT License
-  By     : Sean MacIsaac
+  Name    : Animate
+  Version : 1.5.1
+  License : MIT License
+  By      : Sean MacIsaac
 */
 
-// animate(options||string).start(el,callback);
-// var editIn = animate('edit');
 ;function animate() {
   var options = {
-    'class' : '_animated',
-    'start' : '-in',
-    'end'   : '-out'
-  }
-  var arr = Array.prototype.slice.apply(arguments);
-  for (var i = 0;i < arr.length;i++) {
-    if (typeof arr[i] === 'string') {
-      options['class'] = arr[i];
-    } else if (typeof arr[i] === 'object') {
-      $.extend(options,arr[i]);
+    protected: {
+      className : '_animated',
+      start     : '--in',
+      end       : '--out'
     }
-  }
-  function matchArray(arr,string) {
-    var out = false;
-    for (var i = 0;i < arr.length;i++) {
-      if (arr[i].match(new RegExp(string,'i')) !== null) {
-        out = true;
-      }
-    }
-    return out;
-  }
-  function getName(el,eventNames) {
-    var arr = [];
-    // from bootstrap (ish)
-    for (var name in eventNames) {
-      if (typeof el[0].style[name] !== 'undefined' && !matchArray(arr,eventNames[name])) {
-        arr.push(eventNames[name]);
-      }
-    }
-    if (arr.length) {
-      return arr;
+  };
+  for (var i = 0;i < arguments.length;i++) {
+    if (typeof arguments[i] === 'string') {
+      options.protected.className = arguments[i];
     } else {
-      return false;
+      $.extend(options.protected, arguments[i]);
     }
   }
-  function trigger(el,callback) {
-    var end = getName(el,{
-      'WebkitTransition' : 'webkitTransitionEnd',
-      'MozTransition'    : 'transitionend',
-      'OTransition'      : 'oTransitionEnd',
-      'transition'       : 'transitionend',
-      'WebkitAnimation'  : 'webkitAnimationEnd',
-      'MozAnimation'     : 'animationend',
-      'OAnimation'       : 'oAnimationEnd',
-      'animation'        : 'animationend',
-    });
-    if (end) {
-      for (var i = 0;i<end.length;i++) {
-        el[0].removeEventListener(end[i], callback, false);
-        el[0].addEventListener(end[i], callback, false);
-      }
-    } else {
-      callback();
-    }
-  }
-  function init(el,direction,callback) {
-    // Remove the nesting of the arguments from being passed inside an array
-    function toggle(el) {
-      if (direction === 'in') {
-        el.removeClass(options['class'] + options['end']);
-        el.addClass(options['class'] + options['start']);
-      } else if (el.hasClass(options['class'] + options['start'])) {
-        el.addClass(options['class'] + options['end']);
-        el.removeClass(options['class'] + options['start']);
-      }
-      // 
-      trigger(el,function () {
-        if (direction === 'out') {
-          el.removeClass(options['class'] + options['end']);
-        }
-        if (typeof callback === 'function') {
-          callback(el);
-        }
-      });
-      return el;
-    }
-    if (!el.size()) {
-      return false;
-    } else {
-      return toggle(el);
-    }
-  }
-  return {
-    animatedIn: function (el) {
-      return (el.hasClass(options['class'] + options['start']));
-    },
-    animatedOut: function (el) {
-      return (el.hasClass(options['class'] + options['end']));
-    },
-    start: function (el,callback) {
-      return init(el,'in',callback);
-    },
-    end: function (el,callback) {
-      return init(el,'out',callback);
-    },
-    scroll: function (parent,pos) {
-      var time   = 70;
-      var start;
-      var i      = 0;
-      var frames = 20;
-      var pos;
+  return animate.compose(options);
+}
 
-      if (parent === window) {
-        start = window.pageYOffset
-      } else {
-        start = parent.offset().top;
-      }
-
-      function s() {
-        i++;
-        parent.scrollTo(0,(start-((start/frames)*i))+((pos/frames)*i));
-        if (i<frames) {
-          setTimeout(function () {
-            s();
-          },(time/frames));
-        }
-      };
-      if (parent !== window) {
-        parent = parent[0];
-      }
-      s();
+animate.compose = function (options) {
+  function extend(k) {
+    return function () {
+      return animate.fn[k].apply(options, arguments);
     }
   }
+  for (var k in animate.fn) {
+    options[k] = extend(k);
+  }
+  return options;
+};
+
+animate.fn = {};
+
+animate.fn.is = function (el) {
+  var start = el.hasClass(this.protected.className + this.protected.start);
+  var end   = el.hasClass(this.protected.className + this.protected.end);
+  if (start) {
+    return 'start';
+  } else if (end) {
+    return 'end';
+  } else {
+    return false;
+  }
+};
+
+animate.getTime = function(element) {
+  var animation = ['animation', 'transition'];
+  var time      = [];
+  function add(member) {
+    var temp = element.css(member);
+    if (typeof temp === 'string') {
+      return (parseFloat(temp.split(' ')[1], 10) + parseFloat(temp.split(' ')[3], 10)) * 1000;
+    }
+    return 0;
+  }
+  for (var i = 0; i < animation.length; i++) {
+    time.push(add(animation[i]));
+  }
+  time.sort(function (a, b) {
+    return a - b;
+  });
+  return time[1];
+};
+
+animate.fn.trigger = function (element, callback) {
+  var $this = this;
+  var time  = animate.getTime(element);
+  setTimeout(function () {
+    callback.call($this);
+  }, time);
+};
+
+animate.clean = function () {
+  if (typeof this.callback === 'function') {
+    this.callback.call(this);
+  }
+  if (this.type === 'end') {
+    this.element.removeClass(this.addClass);
+  }
+};
+
+animate.startEnd = function () {
+  var className    = this.protected.className;
+  var $this        = this;
+  this.removeClass = className + this.protected[{start: 'end', end: 'start'}[this.type]];
+  this.addClass    = className + this.protected[{start: 'start', end: 'end'}[this.type]];
+  this.element.removeClass(this.removeClass);
+  this.element.addClass(this.addClass);
+  this.trigger(this.element, animate.clean);
+  return this.element;
+};
+
+animate.fn.start = function (el, callback) {
+  this.type     = 'start';
+  this.callback = callback;
+  this.element  = el;
+  return animate.startEnd.call(this);
+};
+
+animate.fn.end = function (el, callback) {
+  this.type     = 'end';
+  this.callback = callback;
+  this.element  = el;
+  return animate.startEnd.call(this);
+};
+
+animate.findParent = function (el) {
+  var parent = el.parent();
+  while (!parent.is('body')) {
+    if (/scroll/.test(parent.css('overflow'))) {
+      return parent;
+    }
+    parent = parent.parent();
+  }
+  return $(window);
+};
+
+animate.fn.scroll = function (el) {
+  var parent = animate.findParent(el);
+  var start  = parent.scrollTop();
+  var pos    = el.offset().top - start - 100;
+  var time   = 200;
+  var frames = 20;
+  function s(i) {
+    var scrollTop = start + ((pos / frames) * i);
+    parent.scrollTop(scrollTop);
+    if (i < frames) {
+      setTimeout(function () {
+        s(i + 1);
+      },(time / frames));
+    }
+  }
+  s(0);
 };
